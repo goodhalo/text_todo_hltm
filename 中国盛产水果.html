@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国盛产的水果</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif;background:linear-gradient(135deg,#fdf6e3 0%,#fef9ef 30%,#fff5e6 60%,#fdf2e9 100%);min-height:100vh;color:#4a3728;}
+
+        .hero{background:linear-gradient(135deg,#e74c3c 0%,#f39c12 30%,#e67e22 60%,#d35400 100%);color:#fff;text-align:center;padding:60px 20px 70px;clip-path:ellipse(150% 100% at 50% 0%);position:relative;overflow:hidden;}
+        .hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 60%);animation:float 20s linear infinite;}
+        @keyframes float{0%{transform:translate(0,0)}50%{transform:translate(30px,-20px)}100%{transform:translate(0,0)}}
+        .hero h1{font-size:3em;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,0.2);position:relative;z-index:1;}
+        .hero .emoji-deco{font-size:1.2em;display:inline-block;animation:bounce 2s ease-in-out infinite;}
+        .hero .emoji-deco:nth-child(2){animation-delay:0.3s;}
+        .hero .emoji-deco:nth-child(3){animation-delay:0.6s;}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+        .hero p{font-size:1.3em;opacity:0.95;position:relative;z-index:1;}
+
+        .container{max-width:1300px;margin:-30px auto 0;padding:0 30px 60px;position:relative;z-index:2;}
+
+        .stats-bar{display:flex;justify-content:center;gap:40px;background:#fff;border-radius:20px;padding:25px 50px;box-shadow:0 10px 40px rgba(0,0,0,0.08);margin-bottom:50px;flex-wrap:wrap;}
+        .stat-item{text-align:center;}
+        .stat-item .number{font-size:2.5em;font-weight:700;color:#e67e22;}
+        .stat-item .label{font-size:0.95em;color:#8b7355;margin-top:5px;}
+
+        .filter-section{display:flex;justify-content:center;gap:12px;margin-bottom:40px;flex-wrap:wrap;}
+        .filter-btn{padding:10px 24px;border:2px solid #e67e22;background:#fff;color:#e67e22;border-radius:30px;cursor:pointer;font-size:0.95em;font-weight:600;transition:all 0.3s ease;font-family:inherit;}
+        .filter-btn:hover,.filter-btn.active{background:#e67e22;color:#fff;transform:translateY(-2px);box-shadow:0 6px 20px rgba(230,126,34,0.3);}
+
+        .fruit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:30px;}
+
+        .fruit-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.06);transition:all 0.4s cubic-bezier(0.25,0.8,0.25,1.2);cursor:default;position:relative;opacity:0;transform:translateY(30px);animation:fadeInUp 0.6s ease forwards;}
+        .fruit-card:hover{transform:translateY(-10px);box-shadow:0 20px 50px rgba(0,0,0,0.12);}
+        @keyframes fadeInUp{to{opacity:1;transform:translateY(0)}}
+        .fruit-card:nth-child(1){animation-delay:0.05s}.fruit-card:nth-child(2){animation-delay:0.1s}.fruit-card:nth-child(3){animation-delay:0.15s}.fruit-card:nth-child(4){animation-delay:0.2s}.fruit-card:nth-child(5){animation-delay:0.25s}.fruit-card:nth-child(6){animation-delay:0.3s}.fruit-card:nth-child(7){animation-delay:0.35s}.fruit-card:nth-child(8){animation-delay:0.4s}.fruit-card:nth-child(9){animation-delay:0.45s}.fruit-card:nth-child(10){animation-delay:0.5s}.fruit-card:nth-child(11){animation-delay:0.55s}.fruit-card:nth-child(12){animation-delay:0.6s}.fruit-card:nth-child(13){animation-delay:0.65s}.fruit-card:nth-child(14){animation-delay:0.7s}.fruit-card:nth-child(15){animation-delay:0.75s}
+
+        .fruit-card .img-wrapper{height:220px;overflow:hidden;position:relative;background:linear-gradient(135deg,#fef9ef,#fff5e6);cursor:pointer;}
+        .fruit-card .img-wrapper::after{content:'🔍 点击查看产地';position:absolute;inset:0;background:rgba(0,0,0,0.45);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1em;font-weight:600;opacity:0;transition:opacity 0.3s ease;pointer-events:none;}
+        .fruit-card .img-wrapper:hover::after{opacity:1;}
+        .fruit-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;}
+        .fruit-card:hover img{transform:scale(1.08);}
+        .fruit-card .badge{position:absolute;top:15px;right:15px;background:rgba(255,255,255,0.9);backdrop-filter:blur(10px);padding:6px 14px;border-radius:20px;font-size:0.8em;font-weight:600;color:#e67e22;}
+
+        .fruit-card .card-body{padding:22px 25px 25px;}
+        .fruit-card h3{font-size:1.5em;margin-bottom:6px;color:#2c1810;}
+        .fruit-card .scientific-name{font-size:0.85em;color:#b8a088;font-style:italic;margin-bottom:10px;}
+        .fruit-card .region{display:flex;align-items:center;gap:6px;font-size:0.9em;color:#8b7355;margin-bottom:12px;}
+        .fruit-card .region .pin-icon{color:#e74c3c;}
+        .fruit-card .desc{font-size:0.95em;color:#6b5b4e;line-height:1.6;margin-bottom:15px;}
+        .fruit-card .tags{display:flex;gap:8px;flex-wrap:wrap;}
+        .fruit-card .tag{padding:4px 12px;background:#fef5e7;color:#e67e22;border-radius:15px;font-size:0.8em;font-weight:500;}
+
+        .footer{text-align:center;padding:30px;color:#b8a088;font-size:0.9em;}
+
+        /* 模态框 */
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all 0.35s ease;backdrop-filter:blur(4px);}
+        .modal-overlay.active{opacity:1;visibility:visible;}
+        .modal-container{background:#fff;border-radius:24px;width:92vw;max-width:1300px;height:88vh;max-height:850px;display:flex;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.3);transform:scale(0.9) translateY(20px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);position:relative;}
+        .modal-overlay.active .modal-container{transform:scale(1) translateY(0);}
+        .modal-close{position:absolute;top:18px;right:22px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(0,0,0,0.06);cursor:pointer;font-size:1.3em;color:#555;z-index:10;display:flex;align-items:center;justify-content:center;transition:all 0.25s;}
+        .modal-close:hover{background:rgba(0,0,0,0.15);color:#000;transform:rotate(90deg);}
+
+        .map-panel{flex:1;min-width:0;position:relative;background:#fafaf7;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid #eee;}
+        .map-header{padding:18px 24px 10px;display:flex;align-items:center;gap:10px;}
+        .map-header .fruit-icon{font-size:2em;}
+        .map-header h3{font-size:1.25em;color:#333;}
+        .map-header .color-dot{width:14px;height:14px;border-radius:50%;display:inline-block;}
+        .map-legend{display:flex;gap:16px;padding:4px 24px 8px;font-size:0.78em;color:#888;}
+        .map-legend span{display:flex;align-items:center;gap:5px;}
+        .map-legend .legend-swatch{width:12px;height:12px;border-radius:3px;}
+        .map-svg-wrap{flex:1;padding:0 8px 8px;display:flex;align-items:center;justify-content:center;min-height:0;position:relative;}
+        .map-svg-wrap canvas{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;border-radius:8px;}
+        .map-svg-wrap canvas#chinaMapBase{z-index:1;}
+        .map-svg-wrap canvas#chinaMap{z-index:2;}
+        .map-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.95em;color:#b0a090;pointer-events:none;}
+
+        .detail-panel{width:420px;flex-shrink:0;overflow-y:auto;padding:20px 28px 30px;background:#fffefb;display:flex;flex-direction:column;gap:16px;}
+        .detail-panel .fruit-thumb{width:100%;height:180px;border-radius:16px;object-fit:cover;}
+        .detail-panel .fruit-name{font-size:1.8em;font-weight:700;color:#2c1810;margin:0;}
+        .detail-panel .sci-name{font-style:italic;color:#b8a088;font-size:0.9em;}
+        .detail-panel .intro-text{font-size:0.95em;color:#5a4a3a;line-height:1.7;}
+        .nutrition-table{width:100%;border-collapse:collapse;font-size:0.88em;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.05);}
+        .nutrition-table th{background:#f8f4ec;padding:10px 14px;text-align:left;font-weight:600;color:#6b5b4e;}
+        .nutrition-table td{padding:9px 14px;border-bottom:1px solid #f0ebe0;color:#4a3a2a;}
+        .nutrition-table .cal-highlight{font-size:1.5em;font-weight:700;color:#e67e22;}
+        .region-list-title{font-weight:700;color:#2c1810;font-size:1em;margin-bottom:4px;}
+        .region-cards{display:flex;flex-wrap:wrap;gap:8px;}
+        .region-chip{padding:7px 14px;border-radius:20px;font-size:0.85em;font-weight:500;color:#fff;transition:transform 0.2s;}
+        .region-chip:hover{transform:scale(1.05);}
+
+        @media(max-width:900px){.modal-container{flex-direction:column;height:95vh;max-height:none;width:96vw;}.detail-panel{width:100%;flex-shrink:1;padding:16px 20px 24px;}.map-panel{min-height:38vh;}.detail-panel .fruit-thumb{height:140px;}}
+        @media(max-width:768px){.hero h1{font-size:2em}.hero p{font-size:1em}.hero{padding:40px 15px 50px}.fruit-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}.stats-bar{gap:20px;padding:20px 30px}}
+        @media(max-width:480px){.fruit-grid{grid-template-columns:1fr}.container{padding:0 15px 40px}}
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <h1><span class="emoji-deco">🍎</span>中国盛产的水果<span class="emoji-deco">🍊</span><span class="emoji-deco">🍇</span></h1>
+        <p>地大物博 · 四季飘香 · 享誉世界</p>
+    </header>
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat-item"><div class="number">🍑</div><div class="label">世界最大水果生产国</div></div>
+            <div class="stat-item"><div class="number">30+</div><div class="label">主要水果品种</div></div>
+            <div class="stat-item"><div class="number">🌏</div><div class="label">出口全球100+国家</div></div>
+            <div class="stat-item"><div class="number">四季</div><div class="label">全年鲜果不断</div></div>
+        </div>
+        <div class="filter-section">
+            <button class="filter-btn active" data-category="all">🍽️ 全部水果</button>
+            <button class="filter-btn" data-category="温带">🌳 温带水果</button>
+            <button class="filter-btn" data-category="热带">🌴 热带水果</button>
+            <button class="filter-btn" data-category="浆果">🫐 浆果类</button>
+            <button class="filter-btn" data-category="柑橘">🍊 柑橘类</button>
+            <button class="filter-btn" data-category="核果">🪨 核果类</button>
+        </div>
+        <div class="fruit-grid" id="fruitGrid"></div>
+    </div>
+    <footer class="footer">
+        <p>🌿 中国地大物博，水果资源丰富，四季鲜果不断 🌿</p>
+        <p style="margin-top:6px;font-size:0.85em;">数据来源：国家统计局 &amp; 中国果品流通协会 | 图片来自 Unsplash</p>
+    </footer>
+
+    <div class="modal-overlay" id="fruitModal">
+        <div class="modal-container">
+            <button class="modal-close" id="modalClose" title="关闭">✕</button>
+            <div class="map-panel">
+                <div class="map-header">
+                    <span class="fruit-icon" id="modalFruitIcon">🍎</span>
+                    <h3 id="modalFruitName">苹果</h3>
+                    <span class="color-dot" id="modalColorDot"></span>
+                </div>
+                <div class="map-legend">
+                    <span><span class="legend-swatch" id="legendBase"></span> 版图底色</span>
+                    <span><span class="legend-swatch" id="legendHighlight"></span> 盛产区域</span>
+                </div>
+                <div class="map-svg-wrap">
+                    <canvas id="chinaMapBase" width="600" height="520"></canvas>
+                    <canvas id="chinaMap" width="600" height="520"></canvas>
+                    <div class="map-loading" id="mapLoading">加载地图数据中...</div>
+                </div>
+            </div>
+            <div class="detail-panel" id="detailPanel">
+                <img class="fruit-thumb" id="detailThumb" src="" alt="">
+                <div><h2 class="fruit-name" id="detailName"></h2><div class="sci-name" id="detailSciName"></div></div>
+                <p class="intro-text" id="detailIntro"></p>
+                <table class="nutrition-table"><thead><tr><th colspan="2">🥗 营养信息（每100g）</th></tr></thead><tbody id="nutritionBody"></tbody></table>
+                <div><div class="region-list-title">📍 主要盛产地</div><div class="region-cards" id="regionCards"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+</body>
+</html>
